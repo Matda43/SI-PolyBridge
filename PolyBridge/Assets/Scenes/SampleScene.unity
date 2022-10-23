@@ -172,11 +172,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 100
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -216,7 +216,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 900894166}
+  - component: {fileID: 900894169}
   - component: {fileID: 900894167}
+  - component: {fileID: 900894168}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -252,4 +254,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5828057494303550373, guid: 359fa34b23a6e3f49ab1e48a5eed75df, type: 3}
-  radius: 0.27
+  radius: 2
+--- !u!114 &900894168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900894165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c072b1ac8bd66714484cf12d99500afa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &900894169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900894165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6457d0cc042c46746ba2cb71ebd5c4fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

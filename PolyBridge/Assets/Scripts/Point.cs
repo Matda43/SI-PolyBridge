@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Point : MonoBehaviour
 {
+    float radius;
+
     void Start()
     {
 
@@ -21,8 +23,12 @@ public class Point : MonoBehaviour
 
     public void setRadius(float new_radius)
     {
+        this.radius = new_radius;
         this.transform.localScale = Vector2.one * new_radius * 2;
     }
 
-    
+    public float getRadius()
+    {
+        return this.radius;
+    }
 }
