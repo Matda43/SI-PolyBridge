@@ -3,23 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PointMove))]
+[RequireComponent(typeof(Grid))]
+
 public class PointSpawner : MonoBehaviour
 {
     public GameObject prefab;
 
-    [Range(0.1f, 2f)]
+    [Range(1f, 4f)]
     public float radius;
     float radiusRemember;
 
     List<GameObject> points;
 
     PointMove pointMove;
+    Grid grid;
+
+    GameObject parentSpawner;
 
     void Start()
     {
-        this.pointMove = GetComponent<PointMove>();
-        this.points = new List<GameObject>();
-        this.radiusRemember = this.radius;
+        grid = GetComponent<Grid>();
+        pointMove = GetComponent<PointMove>();
+
+        points = new List<GameObject>();
+        radiusRemember = radius;
+
+        parentSpawner = GameObject.Find("PointSpawner");
     }
 
     void Update()
@@ -31,19 +40,23 @@ public class PointSpawner : MonoBehaviour
         }
     }
 
-    public void mouseClick(Vector2 center)
+    public void mouseClick(Vector2 position)
     {
         bool res = pointMove.pointSelected();
         if (!res)
         {
-            GameObject goSelected = positionContainsAPoint(center);
-            if (goSelected == null)
+            Vector2 positionOnGrid = grid.getRealPosition(position);
+            if (grid.isInGrid(positionOnGrid))
             {
-                createAPoint(center);
-            }
-            else
-            {
-                pointMove.selecte(goSelected);
+                GameObject goSelected = positionContainsAPoint(positionOnGrid);
+                if (goSelected == null)
+                {
+                    createAPoint(positionOnGrid);
+                }
+                else
+                {
+                    pointMove.selecte(goSelected);
+                }
             }
         }
         else
@@ -52,20 +65,20 @@ public class PointSpawner : MonoBehaviour
         }
     }
 
-    void createAPoint(Vector3 center)
+    void createAPoint(Vector3 position)
     {
-        GameObject go = Instantiate(prefab, center, Quaternion.identity);
-        go.transform.parent = transform.parent;
+        GameObject go = Instantiate(prefab, position, Quaternion.identity);
+        go.transform.parent = parentSpawner.transform;
         updateRadiusPoint(go);
         points.Add(go);
     }
 
-    GameObject positionContainsAPoint(Vector3 center)
+    GameObject positionContainsAPoint(Vector3 position)
     {
         foreach(GameObject go in points)
         {
             Point point = go.GetComponent<Point>();
-            bool res = isSelectionOnAPoint(center, point);
+            bool res = isSelectionOnAPoint(position, point);
             if(res)
             {
                 return go;
@@ -88,9 +101,9 @@ public class PointSpawner : MonoBehaviour
         go.GetComponent<Point>().setRadius(radius);
     }
 
-    bool isSelectionOnAPoint(Vector3 center, Point point)
+    bool isSelectionOnAPoint(Vector3 position, Point point)
     {
-        Vector2 difference = center - point.transform.position;
+        Vector2 difference = position - point.transform.position;
         float distance = Mathf.Pow(difference.x, 2) + Mathf.Pow(difference.y, 2);
         return distance < Mathf.Pow(point.getRadius(), 2);
     }

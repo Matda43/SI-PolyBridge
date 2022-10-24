@@ -22,8 +22,8 @@ public class Interface : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector2 center = new Vector2(ray.origin.x, ray.origin.y);
-            pointSpawner.mouseClick(center);
+            Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
+            pointSpawner.mouseClick(position);
         }
     }
 }
