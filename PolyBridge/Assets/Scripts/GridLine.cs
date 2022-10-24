@@ -13,8 +13,8 @@ public class GridLine : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material = lineMaterial;
-        lineRenderer.startWidth = 1f;
-        lineRenderer.endWidth = 1f;
+        lineRenderer.startWidth = 0.5f;
+        lineRenderer.endWidth = 0.5f;
     }
 
     public void draw(Vector3 start, Vector3 end)
