@@ -54,21 +54,35 @@ public class LineSpawner : MonoBehaviour
                     }
                     else
                     {
-                        foreach(GameObject go in lines)
+                        GameObject go = lineMove.getGOSelected();
+                        Line l = go.GetComponent<Line>();
+                        Point start = l.getStart();
+                        res = lineAlreadyExistant(start, p);
+                        if (!res && start != p)
                         {
-                            Line l = go.GetComponent<Line>();
-                            if(!l.getEnd())
-                            {
-                                l.setEnd(p);
-                                l.fixedEnd();
-                                lineMove.unselecte();
-                                break;
-                            }
+                            l.setEnd(p);
+                            l.fixedEnd();
+                            lineMove.unselecte();
                         }
                     }
                 }
             }
         }
+    }
+
+    bool lineAlreadyExistant(Point p1, Point p2)
+    {
+        bool res = false;
+        foreach(GameObject go in lines)
+        {
+            Line line = go.GetComponent<Line>();
+            if((line.getStart() == p1 && line.getEnd() == p2) || (line.getStart() == p2 && line.getEnd() == p1))
+            {
+                res = true;
+                break;
+            }
+        }
+        return res;
     }
 
     void createLine(Point start)
