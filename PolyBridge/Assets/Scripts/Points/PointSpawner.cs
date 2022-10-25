@@ -73,7 +73,7 @@ public class PointSpawner : MonoBehaviour
         points.Add(go);
     }
 
-    GameObject positionContainsAPoint(Vector3 position)
+    public GameObject positionContainsAPoint(Vector3 position)
     {
         foreach(GameObject go in points)
         {

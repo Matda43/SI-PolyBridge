@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Point : MonoBehaviour
 {
+    SpriteRenderer spriteRenderer;
     float radius;
 
     void Start()
     {
-
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.yellow;
     }
 
     void Update()
