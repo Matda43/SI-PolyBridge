@@ -87,7 +87,15 @@ public class PointSpawner : MonoBehaviour
         }
         else
         {
-            pointMove.unselecte();
+            Vector2 positionOnGrid = grid.getRealPosition(position);
+            if (grid.isInGrid(positionOnGrid))
+            {
+                GameObject goSelected = positionContainsAPoint(positionOnGrid);
+                if (goSelected == null || goSelected == pointMove.getGOSelected())
+                {
+                    pointMove.unselecte();
+                }
+            }
         }
     }
 
