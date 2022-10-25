@@ -10,7 +10,7 @@ public class PointSpawner : MonoBehaviour
 {
     public GameObject prefab;
 
-    [Range(1f, 4f)]
+    [Range(2f, 4f)]
     public float radius;
     float radiusRemember;
 
@@ -87,15 +87,14 @@ public class PointSpawner : MonoBehaviour
         }
         else
         {
-            Vector2 positionOnGrid = grid.getRealPosition(position);
-            if (grid.isInGrid(positionOnGrid))
+            GameObject goSelected = pointMove.getGOSelected();
+            Point point = goSelected.GetComponent<Point>();
+            GameObject go = positionContainsAnotherPoint(goSelected, point.transform.position);
+            if (go == null || go == goSelected)
             {
-                GameObject goSelected = positionContainsAPoint(positionOnGrid);
-                if (goSelected == null || goSelected == pointMove.getGOSelected())
-                {
-                    pointMove.unselecte();
-                }
+                pointMove.unselecte();
             }
+            
         }
     }
 
@@ -117,6 +116,23 @@ public class PointSpawner : MonoBehaviour
             if(res)
             {
                 return go;
+            }
+        }
+        return null;
+    }
+
+    public GameObject positionContainsAnotherPoint(GameObject g, Vector3 position)
+    {
+        foreach (GameObject go in points)
+        {
+            if (go != g)
+            {
+                Point point = go.GetComponent<Point>();
+                bool res = isSelectionOnAPoint(position, point);
+                if (res)
+                {
+                    return go;
+                }
             }
         }
         return null;

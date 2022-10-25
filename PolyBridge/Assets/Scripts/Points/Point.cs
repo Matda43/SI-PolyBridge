@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -13,6 +14,7 @@ public class Point : MonoBehaviour
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.black;
         setType(PointType.Simple);
     }
 
@@ -27,10 +29,10 @@ public class Point : MonoBehaviour
         switch (new_type)
         {
             case PointType.Simple:
-                spriteRenderer.color = Color.yellow;
+                changeColor(Color.yellow);
                 break;
             default:
-                spriteRenderer.color = Color.red;
+                changeColor(Color.red);
                 break;
         }
     }
@@ -40,13 +42,19 @@ public class Point : MonoBehaviour
         switch (new_status)
         {
             case PointStatus.Selected:
-                spriteRenderer.color = Color.green;
+                changeColor(Color.green);
                 break;
             default:
                 setType(type);
                 break;
         }
     }
+
+    void changeColor(Color color)
+    {
+        this.transform.GetChild(0).GetComponent<SpriteRenderer>().color = color;
+    }
+
 
     public void setPosition(Vector2 new_position)
     {
