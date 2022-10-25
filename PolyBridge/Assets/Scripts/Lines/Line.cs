@@ -6,11 +6,9 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(LineRenderer))]
 public class Line : MonoBehaviour
 {
-    public Material lineMaterial;
-    
+    public Color lineColor;
+
     LineRenderer lineRenderer;
-    Grid grid;
-    bool gridSetted = false;
 
     Point start;
     bool startSetted = false;
@@ -21,37 +19,19 @@ public class Line : MonoBehaviour
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.material = lineMaterial;
-        lineRenderer.startWidth = 4f;
-        lineRenderer.endWidth = 4f;
+
+        lineColor.a = 1;
+        lineRenderer.material.SetColor("Line", lineColor);
+        lineRenderer.startColor = lineColor;
+        lineRenderer.endColor = lineColor;
+
+        lineRenderer.startWidth = 3f;
+        lineRenderer.endWidth = 3f;
     }
 
     void Update()
     {
-        if (gridSetted && startSetted)
-        {
-            if (endSetted)
-            {
-                draw();
-            }/*
-            else
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
-                Vector2 positionOnGrid = grid.getRealPosition(position);
-                if (grid.isInGrid(positionOnGrid))
-                {
-                    draw(positionOnGrid);
-                }
-            }
-            */
-        }
-    }
-
-    public void setGrid(Grid new_grid)
-    {
-        grid = new_grid;
-        gridSetted = true;
+        draw();
     }
 
     public void setStart(Point p)
@@ -72,7 +52,7 @@ public class Line : MonoBehaviour
 
     void draw()
     {
-        if (startSetted && endSetted && gridSetted)
+        if (startSetted && endSetted)
         {
             Vector3 pStart = start.transform.position;
             Vector3 pEnd = end.transform.position;
@@ -86,7 +66,7 @@ public class Line : MonoBehaviour
 
     public void draw(Vector3 v)
     {
-        if (startSetted && gridSetted)
+        if (startSetted)
         {
             Vector3 pStart = start.transform.position;
             pStart.z = 1;

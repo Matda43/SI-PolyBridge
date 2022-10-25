@@ -17,6 +17,8 @@ public class LineSpawner : MonoBehaviour
 
     List<GameObject> lines;
 
+    GameObject parentSpawner;
+
     void Start()
     {
         lines = new List<GameObject>();
@@ -24,6 +26,8 @@ public class LineSpawner : MonoBehaviour
         pointSpawner = GetComponent<PointSpawner>();
         pointMove = GetComponent<PointMove>();
         lineMove = GetComponent<LineMove>();
+
+        parentSpawner = GameObject.Find("LineSpawner");
     }
 
     void Update()
@@ -70,8 +74,8 @@ public class LineSpawner : MonoBehaviour
     void createLine(Point start)
     {
         GameObject go = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        go.transform.parent = parentSpawner.transform;
         Line line = go.GetComponent<Line>();
-        line.setGrid(grid);
         line.setStart(start);
         lineMove.selecte(go);
         lines.Add(go);
