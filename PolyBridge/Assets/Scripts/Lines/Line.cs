@@ -16,7 +16,7 @@ public class Line : MonoBehaviour
     Point end;
     bool endSetted = false;
 
-    void Start()
+    void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
 
