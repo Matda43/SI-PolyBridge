@@ -4,6 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(PointMove))]
 [RequireComponent(typeof(Grid))]
+[RequireComponent(typeof(LineMove))]
 
 public class PointSpawner : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class PointSpawner : MonoBehaviour
 
     PointMove pointMove;
     Grid grid;
+    LineMove lineMove;
 
     GameObject parentSpawner;
 
@@ -24,6 +26,7 @@ public class PointSpawner : MonoBehaviour
     {
         grid = GetComponent<Grid>();
         pointMove = GetComponent<PointMove>();
+        lineMove = GetComponent<LineMove>();
 
         points = new List<GameObject>();
         radiusRemember = radius;
@@ -45,17 +48,21 @@ public class PointSpawner : MonoBehaviour
         bool res = pointMove.pointSelected();
         if (!res)
         {
-            Vector2 positionOnGrid = grid.getRealPosition(position);
-            if (grid.isInGrid(positionOnGrid))
+            res = lineMove.lineSelected();
+            if (!res)
             {
-                GameObject goSelected = positionContainsAPoint(positionOnGrid);
-                if (goSelected == null)
+                Vector2 positionOnGrid = grid.getRealPosition(position);
+                if (grid.isInGrid(positionOnGrid))
                 {
-                    createAPoint(positionOnGrid);
-                }
-                else
-                {
-                    pointMove.selecte(goSelected);
+                    GameObject goSelected = positionContainsAPoint(positionOnGrid);
+                    if (goSelected == null)
+                    {
+                        createAPoint(positionOnGrid);
+                    }
+                    else
+                    {
+                        pointMove.selecte(goSelected);
+                    }
                 }
             }
         }
@@ -106,5 +113,12 @@ public class PointSpawner : MonoBehaviour
         Vector2 difference = position - point.transform.position;
         float distance = Mathf.Pow(difference.x, 2) + Mathf.Pow(difference.y, 2);
         return distance < Mathf.Pow(point.getRadius(), 2);
+    }
+
+    public void remove(GameObject go)
+    {
+        points.Remove(go);
+        Destroy(go);
+        pointMove.unselecte();   
     }
 }

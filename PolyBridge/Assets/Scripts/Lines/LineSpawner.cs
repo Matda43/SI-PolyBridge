@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Grid))]
 [RequireComponent(typeof(PointSpawner))]
 [RequireComponent(typeof(PointMove))]
+[RequireComponent(typeof(LineMove))]
 public class LineSpawner : MonoBehaviour
 {
     public GameObject prefab;
@@ -12,11 +13,9 @@ public class LineSpawner : MonoBehaviour
     Grid grid;
     PointSpawner pointSpawner;
     PointMove pointMove;
-
+    LineMove lineMove;
 
     List<GameObject> lines;
-
-    bool isLineSelected = false;
 
     void Start()
     {
@@ -24,6 +23,7 @@ public class LineSpawner : MonoBehaviour
         grid = GetComponent<Grid>();
         pointSpawner = GetComponent<PointSpawner>();
         pointMove = GetComponent<PointMove>();
+        lineMove = GetComponent<LineMove>();
     }
 
     void Update()
@@ -43,7 +43,8 @@ public class LineSpawner : MonoBehaviour
                 if (goSelected != null)
                 {
                     Point p = goSelected.GetComponent<Point>();
-                    if (!isLineSelected)
+                    res = lineMove.lineSelected();
+                    if (!res)
                     {
                         createLine(p);
                     }
@@ -55,7 +56,8 @@ public class LineSpawner : MonoBehaviour
                             if(!l.getEnd())
                             {
                                 l.setEnd(p);
-                                isLineSelected = false;
+                                l.fixedEnd();
+                                lineMove.unselecte();
                                 break;
                             }
                         }
@@ -71,7 +73,36 @@ public class LineSpawner : MonoBehaviour
         Line line = go.GetComponent<Line>();
         line.setGrid(grid);
         line.setStart(start);
-        isLineSelected = true;
+        lineMove.selecte(go);
         lines.Add(go);
+    }
+
+    public void removeFromPoint(GameObject goPoint)
+    {
+        Point p = goPoint.GetComponent<Point>();
+        if (p != null)
+        {
+            List<GameObject> gos = new List<GameObject>();
+            foreach (GameObject go in lines)
+            {
+                Line l = go.GetComponent<Line>();
+                if (l.getStart().Equals(p) || l.getEnd().Equals(p))
+                {
+                    gos.Add(go);
+                }
+            }
+            foreach (GameObject go in gos)
+            {
+                lines.Remove(go);
+                Destroy(go);
+            }
+        }
+    }
+
+    public void remove(GameObject go)
+    {
+        lines.Remove(go);
+        Destroy(go);
+        lineMove.unselecte();
     }
 }

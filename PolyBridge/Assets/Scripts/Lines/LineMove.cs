@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Grid))]
-public class PointMove : MonoBehaviour
+public class LineMove : MonoBehaviour
 {
     GameObject goSelected;
     bool isSelected;
@@ -12,31 +12,31 @@ public class PointMove : MonoBehaviour
 
     void Start()
     {
-        isSelected = false;   
+        isSelected = false;
         grid = GetComponent<Grid>();
     }
 
     void Update()
     {
-        movePoint();
+        moveLine();
     }
 
-    void movePoint()
+    void moveLine()
     {
-        if(isSelected && goSelected != null)
+        if (isSelected && goSelected != null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Point point = goSelected.GetComponent<Point>();
+            Line line = goSelected.GetComponent<Line>();
             Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
             Vector2 positionOnGrid = grid.getRealPosition(position);
             if (grid.isInGrid(positionOnGrid))
             {
-                point.setPosition(positionOnGrid);
+                line.draw(positionOnGrid);
             }
         }
     }
 
-    public bool pointSelected()
+    public bool lineSelected()
     {
         return this.isSelected;
     }

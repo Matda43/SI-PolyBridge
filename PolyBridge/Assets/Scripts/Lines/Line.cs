@@ -33,7 +33,7 @@ public class Line : MonoBehaviour
             if (endSetted)
             {
                 draw();
-            }
+            }/*
             else
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -44,6 +44,7 @@ public class Line : MonoBehaviour
                     draw(positionOnGrid);
                 }
             }
+            */
         }
     }
 
@@ -62,6 +63,10 @@ public class Line : MonoBehaviour
     public void setEnd(Point p)
     {
         end = p;
+    }
+
+    public void fixedEnd()
+    {
         endSetted = true;
     }
 
@@ -79,7 +84,7 @@ public class Line : MonoBehaviour
         }
     }
 
-    void draw(Vector3 v)
+    public void draw(Vector3 v)
     {
         if (startSetted && gridSetted)
         {
@@ -91,8 +96,18 @@ public class Line : MonoBehaviour
             lineRenderer.SetPositions(positions);
         }
     }
-    public bool getEnd()
+    public bool hasEnd()
     {
         return endSetted;
+    }
+
+    public Point getStart()
+    {
+        return start;
+    }
+
+    public Point getEnd()
+    {
+        return end;
     }
 }
