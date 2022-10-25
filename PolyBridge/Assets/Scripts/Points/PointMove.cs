@@ -7,12 +7,14 @@ public class PointMove : MonoBehaviour
 {
     GameObject goSelected;
     bool isSelected;
+    bool isMovable;
 
     Grid grid;
 
     void Start()
     {
         isSelected = false;   
+        isMovable = false;
         grid = GetComponent<Grid>();
     }
 
@@ -23,7 +25,7 @@ public class PointMove : MonoBehaviour
 
     void movePoint()
     {
-        if(isSelected && goSelected != null)
+        if(isSelected && isMovable && goSelected != null)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Point point = goSelected.GetComponent<Point>();
@@ -41,15 +43,25 @@ public class PointMove : MonoBehaviour
         return this.isSelected;
     }
 
-    public void selecte(GameObject go)
+    public bool pointMovable()
+    {
+        return this.isMovable;
+    }
+
+    public void selecte(GameObject go, bool movable)
     {
         this.goSelected = go;
         this.isSelected = true;
+        this.isMovable = movable;
+        Point point = goSelected.GetComponent<Point>();
+        point.setStatus(PointStatus.Selected);
     }
 
     public void unselecte()
     {
         this.isSelected = false;
+        Point point = goSelected.GetComponent<Point>();
+        point.setStatus(PointStatus.Unselected);
     }
 
     public GameObject getGOSelected()

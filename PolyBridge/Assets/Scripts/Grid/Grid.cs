@@ -27,7 +27,7 @@ public class Grid : MonoBehaviour
 
     GameObject parentGrid;
 
-    private void Start()
+    private void Awake()
     {
         realWidth = width + 1;
         realHeight = height + 1;
@@ -134,4 +134,17 @@ public class Grid : MonoBehaviour
         return false;
     }
 
+    public Vector3 getAnchorLeft()
+    {
+        int i = 0;
+        int j = (int)(realHeight / 2);
+        return getWorldPosition(-i,j);
+    }
+
+    public Vector3 getAnchorRight()
+    {
+        int i = realWidth-1;
+        int j = (int)(realHeight / 2);
+        return getWorldPosition(i, j);
+    }
 }

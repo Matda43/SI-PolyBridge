@@ -21,6 +21,8 @@ public class PointSpawner : MonoBehaviour
     LineMove lineMove;
 
     GameObject parentSpawner;
+    GameObject anchorLeft;
+    GameObject anchorRight;
 
     void Start()
     {
@@ -29,9 +31,19 @@ public class PointSpawner : MonoBehaviour
         lineMove = GetComponent<LineMove>();
 
         points = new List<GameObject>();
+
         radiusRemember = radius;
 
         parentSpawner = GameObject.Find("PointSpawner");
+
+        Vector3 positionAnchorLeft = grid.getAnchorLeft();
+        anchorLeft = createAPoint(positionAnchorLeft);
+        Point pAnchorLeft = anchorLeft.GetComponent<Point>();
+        pAnchorLeft.setType(PointType.Anchor);
+        Vector3 positionAnchorRight = grid.getAnchorRight();
+        anchorRight = createAPoint(positionAnchorRight);
+        Point pAnchorRight = anchorRight.GetComponent<Point>();
+        pAnchorRight.setType(PointType.Anchor);
     }
 
     void Update()
@@ -55,13 +67,20 @@ public class PointSpawner : MonoBehaviour
                 if (grid.isInGrid(positionOnGrid))
                 {
                     GameObject goSelected = positionContainsAPoint(positionOnGrid);
-                    if (goSelected == null)
+                    if (goSelected != null)
                     {
-                        createAPoint(positionOnGrid);
+                        if (goSelected != anchorLeft && goSelected != anchorRight)
+                        {
+                            pointMove.selecte(goSelected, true);
+                        }
+                        else
+                        {
+                            pointMove.selecte(goSelected, false);
+                        }
                     }
                     else
                     {
-                        pointMove.selecte(goSelected);
+                        //createAPoint(positionOnGrid);
                     }
                 }
             }
@@ -72,12 +91,13 @@ public class PointSpawner : MonoBehaviour
         }
     }
 
-    void createAPoint(Vector3 position)
+    public GameObject createAPoint(Vector3 position)
     {
         GameObject go = Instantiate(prefab, position, Quaternion.identity);
         go.transform.parent = parentSpawner.transform;
         updateRadiusPoint(go);
         points.Add(go);
+        return go;
     }
 
     public GameObject positionContainsAPoint(Vector3 position)
@@ -117,8 +137,21 @@ public class PointSpawner : MonoBehaviour
 
     public void remove(GameObject go)
     {
-        points.Remove(go);
-        Destroy(go);
+        if (go != anchorLeft && go != anchorRight)
+        {
+            points.Remove(go);
+            Destroy(go);
+        }
         pointMove.unselecte();   
+    }
+
+    public GameObject getAnchorLeft()
+    {
+        return this.anchorLeft;
+    }
+
+    public GameObject getAnchorRight()
+    {
+        return this.anchorRight;
     }
 }

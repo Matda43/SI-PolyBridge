@@ -66,6 +66,20 @@ public class LineSpawner : MonoBehaviour
                         }
                     }
                 }
+                else
+                {
+                    res = lineMove.lineSelected();
+                    if (res)
+                    {
+                        GameObject go = lineMove.getGOSelected();
+                        Line l = go.GetComponent<Line>();
+                        GameObject g = pointSpawner.createAPoint(positionOnGrid);
+                        Point end = g.GetComponent<Point>();
+                        l.setEnd(end);
+                        l.fixedEnd();
+                        lineMove.unselecte();
+                    }
+                }
             }
         }
     }
