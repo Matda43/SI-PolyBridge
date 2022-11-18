@@ -12,15 +12,12 @@ public class Simulation : MonoBehaviour
     bool isRunning = false;
 
     Dictionary<Point, List<(Point, float)>> dicoPointNum;
+    Dictionary<Point, Vector3> dicoPointPosition;
 
     public float k;
     const float mass = 2;
     const float g = 9.8f;
     Vector2 zGravity = new Vector2(0, -1);
-    
-
-    Vector3 velocity;
-
 
     // Start is called before the first frame update
     void Start()
@@ -57,13 +54,12 @@ public class Simulation : MonoBehaviour
                     Vector3 positionS = key.transform.position;
                     Vector3 positionE = list[i].Item1.transform.position;
                     float length = Mathf.Sqrt(Mathf.Pow(positionS.x - positionE.x, 2) + Mathf.Pow(positionS.y - positionE.y, 2) + Mathf.Pow(positionS.z - positionE.z, 2));
-
-                    Fstarts += direction.normalized * k * (length - list[i].Item2);
+                    Fstarts += -1 * direction.normalized * k * (list[i].Item2 - length);
                 }
 
                 Vector3 acceleration = (fGravity + Fstarts) / mass;
 
-                velocity = key.getVelocity() + Time.deltaTime * acceleration;
+                Vector3 velocity = key.getVelocity() + Time.deltaTime * acceleration;
 
                 key.transform.position = key.transform.position + Time.deltaTime * velocity;
                 key.SetVelocity(velocity);
@@ -76,11 +72,15 @@ public class Simulation : MonoBehaviour
     void calcultateLength()
     {
         dicoPointNum = new Dictionary<Point, List<(Point, float)>>();
+        dicoPointPosition = new Dictionary<Point, Vector3>();
         List<GameObject> lines = lineSpawner.getLines();
         List<GameObject> points = pointSpawner.getPoints();
         for (int j = 0; j < points.Count; j++)
         {
             Point point = points[j].GetComponent<Point>();
+
+            dicoPointPosition[point] = point.transform.position;
+            
             for (int i = 0; i < lines.Count; i++)
             {
                 Line l = lines[i].GetComponent<Line>();
@@ -125,10 +125,21 @@ public class Simulation : MonoBehaviour
         isRunning = true;
     }
 
+    void resetPositionPoint()
+    {
+        foreach(Point point in dicoPointPosition.Keys)
+        {
+            point.transform.position = dicoPointPosition[point];
+            point.SetVelocity(Vector3.zero);
+        }
+    }
+
+
     public void stop()
     {
         if (isRunning)
         {
+            resetPositionPoint();
             isRunning = false;
         }
     }

@@ -32,6 +32,7 @@ public class PointMove : MonoBehaviour
             if (grid.isInGrid(positionOnGrid))
             {
                 point.setPosition(positionOnGrid);
+                point.SetVelocity(Vector3.zero);
             }
         }
     }

@@ -23,11 +23,11 @@ public class Interface : MonoBehaviour
 
     void Update()
     {
+        checkMouseClick();
+
         if (!simulationRun)
         {
-            checkMouseClick();
             checkButtonPressed();
-
             simulation.stop();
         }
         else
@@ -44,12 +44,16 @@ public class Interface : MonoBehaviour
             Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
             pointSpawner.mouseClick(position);
         }
-        if (Input.GetMouseButtonDown(1))
+
+        if (!simulationRun)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
-            lineSpawner.mouseClick(position);
-        }        
+            if (Input.GetMouseButtonDown(1))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
+                lineSpawner.mouseClick(position);
+            }
+        }
     }
 
     void checkButtonPressed()
