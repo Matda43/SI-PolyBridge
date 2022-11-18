@@ -136,4 +136,9 @@ public class LineSpawner : MonoBehaviour
         Destroy(go);
         lineMove.unselecte();
     }
+
+    public List<GameObject> getLines()
+    {
+        return this.lines;
+    }
 }

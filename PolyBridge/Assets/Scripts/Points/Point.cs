@@ -8,6 +8,8 @@ public class Point : MonoBehaviour
 
     PointType type;
 
+    Vector3 velocity = Vector3.zero;
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -67,6 +69,16 @@ public class Point : MonoBehaviour
     public float getRadius()
     {
         return this.radius;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return velocity;
+    }
+
+    public void SetVelocity(Vector3 new_velocity)
+    {
+        velocity = new_velocity;
     }
 }
 

@@ -177,4 +177,9 @@ public class PointSpawner : MonoBehaviour
     {
         return this.anchorRight;
     }
+
+    public List<GameObject> getPoints()
+    {
+        return this.points;
+    }
 }

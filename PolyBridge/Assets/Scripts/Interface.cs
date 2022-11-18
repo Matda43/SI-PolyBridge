@@ -3,23 +3,37 @@ using UnityEngine;
 [RequireComponent(typeof(PointSpawner))]
 [RequireComponent(typeof(LineSpawner))]
 [RequireComponent(typeof(Destructor))]
+[RequireComponent(typeof(Simulation))]
 public class Interface : MonoBehaviour
 {
     PointSpawner pointSpawner;
     LineSpawner lineSpawner;
     Destructor destructor;
+    Simulation simulation;
+
+    public bool simulationRun = false;
 
     void Start()
     {
         pointSpawner = GetComponent<PointSpawner>();
         lineSpawner = GetComponent<LineSpawner>();
         destructor = GetComponent<Destructor>();
+        simulation = GetComponent<Simulation>();
     }
 
     void Update()
     {
-        checkMouseClick();
-        checkButtonPressed();
+        if (!simulationRun)
+        {
+            checkMouseClick();
+            checkButtonPressed();
+
+            simulation.stop();
+        }
+        else
+        {
+            simulation.run();
+        }
     }
 
     void checkMouseClick()
@@ -35,7 +49,7 @@ public class Interface : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector2 position = new Vector2(ray.origin.x, ray.origin.y);
             lineSpawner.mouseClick(position);
-        }
+        }        
     }
 
     void checkButtonPressed()
